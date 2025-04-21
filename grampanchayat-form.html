@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grampanchayat Valunj Collection Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #2e7d32;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1b5e20;
+    }
+
+    #responseMsg {
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Grampanchayat Collection Form</h2>
+
+  <form id="collectionForm">
+    <input name="payerName" placeholder="Payer Name" required />
+    <input name="contactNumber" placeholder="Contact Number" required />
+    <input name="amount" type="number" placeholder="Amount (₹)" required />
+    
+    <select name="type" required>
+      <option value="">-- Select Collection Type --</option>
+      <option>House Tax</option>
+      <option>Water Bill</option>
+      <option>Fine</option>
+      <option>Others</option>
+    </select>
+    
+    <select name="paymentMode" required>
+      <option value="">-- Select Payment Mode --</option>
+      <option>Cash</option>
+      <option>UPI</option>
+      <option>Cheque</option>
+      <option>Bank Transfer</option>
+    </select>
+    
+    <textarea name="remarks" placeholder="Remarks (optional)"></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="responseMsg"></p>
+
+  <script>
+    const form = document.getElementById("collectionForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      fetch("https://script.google.com/macros/s/AKfycbw3kCJFpTiuvbmLpztSpHWfvemyoD1ImdP_bTBctWskwzTCXHgHd3ycTx4w7UnGYTmn/exec", {
+        method: "POST",
+        body: data
+      })
+      .then(res => res.text())
+      .then(response => {
+        document.getElementById("responseMsg").innerText = "✅ Submitted successfully!";
+        form.reset();
+      })
+      .catch(error => {
+        document.getElementById("responseMsg").innerText = "❌ Submission failed!";
+        console.error(error);
+      });
+    });
+  </script>
+
+</body>
+</html>
