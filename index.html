@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Grampanchayat Valunj Collection Form</title>
+  <h2>Valunj Collection Form</h2>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -17,10 +17,16 @@
       color: #2e7d32;
     }
 
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
     input, select, textarea, button {
       width: 100%;
       padding: 10px;
-      margin: 10px 0;
+      margin: 5px 0 15px;
       border-radius: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box;
@@ -46,30 +52,37 @@
 </head>
 <body>
 
-  <h2>Grampanchayat Collection Form</h2>
+<h2>(घरपट्टी, पाणीपट्टी, विजकर)</h2>
+   <form id="collectionForm">
+    <label for="payerName">Payer Name (मिळकतदार)</label>
+    <input name="payerName" id="payerName" placeholder="Payer Name (मिळकतदार)" required />
 
-  <form id="collectionForm">
-    <input name="payerName" placeholder="Payer Name" required />
-    <input name="contactNumber" placeholder="Contact Number" required />
-    <input name="amount" type="number" placeholder="Amount (₹)" required />
-    
-    <select name="type" required>
-      <option value="">-- Select Collection Type --</option>
-      <option>House Tax</option>
-      <option>Water Bill</option>
-      <option>Fine</option>
-      <option>Others</option>
-    </select>
-    
-    <select name="paymentMode" required>
-      <option value="">-- Select Payment Mode --</option>
+    <label for="contactNumber">Contact Number (मोबाईल नं)</label>
+    <input name="contactNumber" id="contactNumber" placeholder="Contact Number (मोबाईल नं)" required pattern="\d{10}" maxlength="10" title="Please enter a 10-digit mobile number" />
+
+    <label for="amount">Amount ₹ (रक्कम)</label>
+    <input name="amount" id="amount" type="number" placeholder="Amount ₹ (रक्कम)" required />
+
+    <label for="type">Collection Type (प्रकार)</label>
+    <select name="type" id="type" required>
+      <option value="">-- Select Collection Type (प्रकार) --</option>
+      <option>House Tax (घरपट्टी)</option>
+      <option>Water Bill (पाणीपट्टी)</option>
+      <option>Street lights (पथ दिवे कर)</option>
+      <option>Fine (दंड)</option>
+      </select>
+
+    <label for="paymentMode">Payment Mode (देयक प्रकार)</label>
+    <select name="paymentMode" id="paymentMode" required>
+      <option value="">-- Select Payment Mode (देयक प्रकार) --</option>
       <option>Cash</option>
       <option>UPI</option>
       <option>Cheque</option>
       <option>Bank Transfer</option>
     </select>
-    
-    <textarea name="remarks" placeholder="Remarks (optional)"></textarea>
+
+    <label for="remarks">Remarks (टिप्पण्या)</label>
+    <textarea name="remarks" id="remarks" placeholder="Remarks (टिप्पण्या)"></textarea>
 
     <button type="submit">Submit</button>
   </form>
@@ -80,6 +93,13 @@
     const form = document.getElementById("collectionForm");
     form.addEventListener("submit", function(e) {
       e.preventDefault();
+      const contact = form.contactNumber.value.trim();
+
+      if (!/^\d{10}$/.test(contact)) {
+        alert("❌ Please enter a valid 10-digit mobile number.");
+        return;
+      }
+
       const data = new FormData(form);
 
       fetch("https://script.google.com/macros/s/AKfycbw3kCJFpTiuvbmLpztSpHWfvemyoD1ImdP_bTBctWskwzTCXHgHd3ycTx4w7UnGYTmn/exec", {
